@@ -77,12 +77,11 @@ playing_field = [[' ', '0', '1', '2'],  # Список для пользоват
 
 # Если ввели неверно, то проверка и заново
 while True:
-    choice_player = input("Выберите за кого играть: 'о' или 'х'\n")
+    choice_player = input("Выберите за кого хотите играть: 'о' или 'х'\n")
     if choice_player == 'о' or choice_player == 'х':
         break
     else:
         print("Вы ввели не верно (может быть другая расскладка)\n")
-
 user_turn = 'х' if choice_player == 'х' else 'о'
 random_turn = 'о' if user_turn == 'х' else 'х'
 print()
@@ -95,7 +94,7 @@ while True:
             first_move == 'случайно']):
         break
     else:
-        print("Вы ввели не верно (может быть другая расскладка)\n")
+        print("Вы ввели не верно (может быть другая расскладка)\n")       
 if first_move == 'компьютер':
     first_move = 1
 elif first_move == 'случайно':
@@ -121,15 +120,14 @@ while True:
                 j_user > 3]):
             print(Fore.GREEN, "Неверный индекс, введите строку и столбец заново", Style.RESET_ALL, '\n')
             continue
-        elif any([playing_field[i_user][j_user] == 'х',  # Проверка занято или нет
-                  playing_field[i_user][j_user] == 'о']):
-            print(Fore.GREEN, "Ячейка занята, выберете другую", Style.RESET_ALL, '\n')
-            continue
-        else:
+        elif playing_field[i_user][j_user] == '-':  # Проверка занято или нет
             playing_field[i_user][j_user] = user_turn  # Присвоение новой ячейки в основном списке
-            playing_field_reserve[i_user-1][j_user-1] = user_turn  # Присвоение новой ячейки во втором списке
+            playing_field_reserve[i_user - 1][j_user - 1] = user_turn  # Присвоение новой ячейки во втором списке
             print_list(playing_field)  # Показать обновленный список
             break
+        else:
+            print(Fore.GREEN, "Ячейка занята, выберете другую", Style.RESET_ALL, '\n')
+            continue
 
 # Проверка победы
     verify_win = win(playing_field_reserve)
@@ -138,8 +136,8 @@ while True:
         break
 
 # Проверка ничьи
-    check_draw = draw(playing_field_reserve)
-    if check_draw == 0:
+    verify_draw_draw = draw(playing_field_reserve)
+    if verify_draw_draw == 0:
         print("Ничья")
         break
 
@@ -152,13 +150,12 @@ while True:
                 j_random < 0,
                 j_random > 3]):
             continue
-        elif any([playing_field[i_random][j_random] == 'х',  # Проверка занято или нет
-                  playing_field[i_random][j_random] == 'о']):
-            continue
-        else:
+        elif playing_field[i_random][j_random] == '-':  # Проверка занято или нет
             playing_field[i_random][j_random] = random_turn  # Присвоение новой ячейки в основном списке
             playing_field_reserve[i_random-1][j_random-1] = random_turn  # Присвоение новой ячейки во втором списке
             break
+        else:
+            continue
 
     print_list(playing_field)  # Показать обновленный список
 
@@ -170,8 +167,8 @@ while True:
         break
 
 # Проверка ничьи
-    check_draw = draw(playing_field_reserve)
-    if check_draw == 0:
+    verify_draw = draw(playing_field_reserve)
+    if verify_draw == 0:
         print()
         print("Ничья")
         break
