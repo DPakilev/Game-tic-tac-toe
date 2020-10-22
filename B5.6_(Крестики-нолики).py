@@ -5,43 +5,19 @@ from colorama import Fore, Style
 from random import randint
 
 
-def win(list_):  # Проверка победы
-    length = len(list_)
-    x = ['х', 'х', 'х']
-    o = ['о', 'о', 'о']
-    if any([list_[0] == o,  # Строки
-
-            list_[1] == o,
-
-            list_[2] == o,
-
-            [list_[i][0] for i in range(length)] == o,  # Столбцы
-
-            [list_[i][1] for i in range(length)] == o,
-
-            [list_[i][2] for i in range(length)] == o,
-
-            [list_[i][i] for i in range(length)] == o,  # Диагональ
-
-            [list_[length-1-i][i] for i in range(length)] == o,  # Обратная диагональ
-
-            list_[0] == x,  # Строки
-
-            list_[1] == x,
-
-            list_[2] == x,
-
-            [list_[i][0] for i in range(length)] == x,  # Столбцы
-
-            [list_[i][1] for i in range(length)] == x,
-
-            [list_[i][2] for i in range(length)] == x,
-
-            [list_[i][i] for i in range(length)] == x,  # Диагональ
-
-            [list_[length-1-i][i] for i in range(length)] == x  # Обратная диагональ
-            ]):
-        return 1  # Значит победа
+def win(list_):
+    wins = [((0, 0), (0, 1), (0, 2)),
+            ((1, 0), (1, 1), (1, 2)),
+            ((2, 0), (2, 1), (2, 2)),
+            ((0, 0), (1, 0), (2, 0)),
+            ((0, 1), (1, 1), (2, 1)),
+            ((0, 2), (1, 2), (2, 2)),
+            ((0, 0), (1, 1), (2, 2)),
+            ((0, 2), (1, 1), (2, 0))]
+    for comb in wins:
+        syms = [list_[pos[0]][pos[1]] for pos in comb]
+        if syms.count('х') == 3 or syms.count('о') == 3:
+            return 1
 
 
 def draw(list_):
@@ -77,11 +53,12 @@ playing_field = [[' ', '0', '1', '2'],  # Список для пользоват
 
 # Если ввели неверно, то проверка и заново
 while True:
-    choice_player = input("Выберите за кого хотите играть: 'о' или 'х'\n")
+    choice_player = input("Выберите за кого играть: 'о' или 'х'\n")
     if choice_player == 'о' or choice_player == 'х':
         break
     else:
         print("Вы ввели не верно (может быть другая расскладка)\n")
+
 user_turn = 'х' if choice_player == 'х' else 'о'
 random_turn = 'о' if user_turn == 'х' else 'х'
 print()
@@ -94,7 +71,7 @@ while True:
             first_move == 'случайно']):
         break
     else:
-        print("Вы ввели не верно (может быть другая расскладка)\n")       
+        print("Вы ввели не верно (может быть другая расскладка)\n")
 if first_move == 'компьютер':
     first_move = 1
 elif first_move == 'случайно':
@@ -120,7 +97,7 @@ while True:
                 j_user > 3]):
             print(Fore.GREEN, "Неверный индекс, введите строку и столбец заново", Style.RESET_ALL, '\n')
             continue
-        elif playing_field[i_user][j_user] == '-':  # Проверка занято или нет
+        elif playing_field[i_user][j_user] == '-':
             playing_field[i_user][j_user] = user_turn  # Присвоение новой ячейки в основном списке
             playing_field_reserve[i_user - 1][j_user - 1] = user_turn  # Присвоение новой ячейки во втором списке
             print_list(playing_field)  # Показать обновленный список
@@ -150,7 +127,7 @@ while True:
                 j_random < 0,
                 j_random > 3]):
             continue
-        elif playing_field[i_random][j_random] == '-':  # Проверка занято или нет
+        elif playing_field[i_random][j_random] == '-':
             playing_field[i_random][j_random] = random_turn  # Присвоение новой ячейки в основном списке
             playing_field_reserve[i_random-1][j_random-1] = random_turn  # Присвоение новой ячейки во втором списке
             break
